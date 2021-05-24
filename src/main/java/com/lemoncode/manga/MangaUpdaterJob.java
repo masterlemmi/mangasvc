@@ -17,8 +17,8 @@ public class MangaUpdaterJob {
     @Autowired
     MangaService mangaService;
 
-//    @Scheduled(cron = "0 0 23-16 * * * ")   //every hour from 7am to 11pm mnla
-   @Scheduled(cron = "0 * * * * ?")  //ever minute
+    @Scheduled(cron = "0 0 23-16 * * * ")   //every hour from 7am to 11pm mnla
+    // @Scheduled(cron = "0 * * * * ?")  //ever minute
     public void scheduleMangaFetchUpdates() {
         LocalDateTime start = LocalDateTime.now();
         String result = mangaService.fetchUpdates();
