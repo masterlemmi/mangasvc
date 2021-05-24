@@ -94,27 +94,31 @@ public class MangaService {
     }
 
     public String fetchUpdates() {
-        List<Manga> noUpdates = repository.findNoUpdatesAndDoneRead();
+        List<Manga> noUpdates = repository.findNoUpdatesAndDoneReadAndNotEnded();
         LOGGER.info("Updating " + noUpdates.size() + " etnries");
+        int newUpdates = 0;
 
-        noUpdates.forEach(
-                manga -> {
-                    try {
-                        SiteCrawler siteCrawler = SiteCrawlerFactory.get(manga.getLastChapterUrl());
-                        CrawledData.Chapter data = siteCrawler.findNextChapter();
-                        if (data != null) {
-                            LOGGER.info(manga.getTitle() + " has next chapter: " + data.getUrl());
-                            manga.setLastChapterUrl(data.getUrl());
-                            manga.setLastChapter(data.getTitle());
-                            manga.setDoneRead(false);
-                            manga.setHasUpdate(true);
-                        }
-                        repository.save(manga);
-                    } catch (Exception e) {
-                        LOGGER.info("error checking updates for " + manga.getTitle() + ": " + e.getMessage());
-                    }
+        for (Manga manga : noUpdates) {
+
+            try {
+                SiteCrawler siteCrawler = SiteCrawlerFactory.get(manga.getLastChapterUrl());
+                CrawledData.Chapter data = siteCrawler.findNextChapter();
+                if (data != null) {
+                    LOGGER.info(manga.getTitle() + " has next chapter: " + data.getUrl());
+                    newUpdates++;
+                    manga.setLastChapterUrl(data.getUrl());
+                    manga.setLastChapter(data.getTitle());
+                    manga.setDoneRead(false);
+                    manga.setHasUpdate(true);
                 }
-        );
+                repository.save(manga);
+            } catch (Exception e) {
+                LOGGER.info("error checking updates for " + manga.getTitle() + ": " + e.getMessage());
+            }
+        }
+
+
+        LOGGER.info("There are " + newUpdates + " new updates.");
 
         return "200";
     }
@@ -156,4 +160,16 @@ public class MangaService {
         //TODO:
         return null;
     }
+
+    public Manga markEnded(Long id) {
+        Manga manga = repository.findById(id);
+
+        if (manga == null) {
+            throw new NotFoundException();
+        }
+
+        manga.setEnded(true);
+        return repository.save(manga);
+    }
+
 }

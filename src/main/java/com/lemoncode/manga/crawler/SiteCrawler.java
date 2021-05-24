@@ -29,7 +29,7 @@ public interface SiteCrawler {
         String proxyServer = System.getenv("http_proxy");
 
         if (StringUtils.isEmpty(proxyServer)) {
-            LOGGER.info("No Proxy setup for Jsoup");
+            LOGGER.debug("No Proxy setup for Jsoup");
             return Jsoup.connect(url);
         }
 

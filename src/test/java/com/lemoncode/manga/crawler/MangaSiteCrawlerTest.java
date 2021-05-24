@@ -67,5 +67,37 @@ class MangaSiteCrawlerTest {
 
     }
 
+    @Test
+    public void findAllPoManga() {
+        SiteCrawler crawler = SiteCrawlerFactory.get("https://pomanga.com/manga/read-spy-x-family-manga/chapter-1");
+
+        assertTrue(crawler instanceof PoMangaCrawler);
+        String title = crawler.findMangaTitle();
+        String mainUrl = UrlNormalizer.normalize(crawler.findMainUrl());
+        String chapterTitle = crawler.findChapterTitle();
+            assertEquals("Spy X Family", title);
+        assertEquals("chapter 1", chapterTitle);
+        assertEquals("https://pomanga.com/manga/read-spy-x-family-manga", mainUrl);
+
+        CrawledData.Chapter next = crawler.findNextChapter();
+        CrawledData.Chapter current = crawler.findCurrentChapter();
+        CrawledData.Chapter last = crawler.findLastChapter();
+
+        assertNotNull(next);
+        assertNotNull(current);
+        assertNotNull(last);
+
+
+        assertEquals("chapter 2", next.getTitle());
+        assertEquals("https://pomanga.com/manga/read-spy-x-family-manga/chapter-2", UrlNormalizer.normalize(next.getUrl()));
+
+        assertEquals("chapter 1", current.getTitle());
+        assertEquals("https://pomanga.com/manga/read-spy-x-family-manga/chapter-1", UrlNormalizer.normalize(current.getUrl()));
+
+        assertNotNull(last.getTitle());
+        assertNotNull(last.getUrl());
+
+    }
+
 
 }

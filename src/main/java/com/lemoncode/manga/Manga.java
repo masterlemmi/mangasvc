@@ -29,6 +29,8 @@ public class Manga implements Serializable {
     private boolean hasUpdate;
     @Column(name = "DONE_READ")
     private boolean doneRead;
+    @Column(name = "ENDED")
+    private boolean ended;
     @Column(name = "LAST_UPDATE_DATE")
     @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime lastUpdateDate;

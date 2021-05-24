@@ -14,6 +14,8 @@ public class SiteCrawlerFactory {
                 return new ManganeloCrawler(chapterUrl);
             case MANHUADEX:
                 return new ManhuadexCrawler(chapterUrl);
+            case POMANGA:
+                return new PoMangaCrawler(chapterUrl);
             default:
                 throw new NotImplementedException(mangaSite + " is not acceptable");
 

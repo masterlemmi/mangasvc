@@ -60,6 +60,11 @@ public class MangaController {
         return this.mangaService.markRead(body);
     }
 
+    @PutMapping("/end/{id}")
+    public Manga markEnd(@PathVariable("id") final Long id) {
+        return this.mangaService.markEnded(id);
+    }
+
 
     @PostMapping
     public Manga addManga(@Valid @RequestBody CreateNewEntryRequest request) {

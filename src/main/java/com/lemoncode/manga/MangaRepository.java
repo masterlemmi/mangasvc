@@ -106,7 +106,7 @@ public class MangaRepository {
         }
     }
 
-    public List<Manga> findNoUpdatesAndDoneRead() {
+    public List<Manga> findNoUpdatesAndDoneReadAndNotEnded() {
         this.entityManager.clear();
         CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
         // create query
@@ -115,7 +115,8 @@ public class MangaRepository {
         Root<Manga> root = query.from(Manga.class);
 
         query.where(cb.equal(root.get(Manga_.hasUpdate), false))
-                .where(cb.equal(root.get(Manga_.doneRead), true));
+                .where(cb.equal(root.get(Manga_.doneRead), true))
+                .where(cb.equal(root.get(Manga_.ended), false));
         //perform query
         return this.entityManager.createQuery(query).getResultList();
     }

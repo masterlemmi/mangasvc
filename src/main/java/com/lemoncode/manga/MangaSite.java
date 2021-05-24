@@ -4,7 +4,7 @@ package com.lemoncode.manga;
 import java.util.Arrays;
 
 public enum MangaSite {
-    MANGANELO("manganelo.com"), MANHUADEX("manhuadex.com");
+    MANGANELO("manganelo.com"), MANHUADEX("manhuadex.com"), POMANGA("pomanga.com");
 
     private String url;
 
