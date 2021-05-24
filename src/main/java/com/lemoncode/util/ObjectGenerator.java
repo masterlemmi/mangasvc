@@ -18,6 +18,7 @@ public class ObjectGenerator {
         manga.setLastChapterUrl(chapterUrl);
         manga.setLastChapter(crawler.findChapterTitle());
         manga.setUrl(crawler.findMainUrl());
+        manga.setEnded(false);
 
 
         return manga;
