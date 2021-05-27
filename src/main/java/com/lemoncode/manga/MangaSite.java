@@ -1,8 +1,9 @@
 package com.lemoncode.manga;
 
 
-import java.util.Arrays;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public enum MangaSite {
     MANGANELO("manganelo.com"), MANHUADEX("manhuadex.com"), POMANGA("pomanga.com");
 
@@ -16,8 +17,12 @@ public enum MangaSite {
         return from(manga.getUrl());
     }
 
-    public static MangaSite from(String url) {
-        return Arrays.stream(values()).filter(s -> url.contains(s.url)).findFirst().orElseThrow(
-                () -> new UnsupportedOperationException(url + " not known"));
+    public static MangaSite from(String u) {
+        log.info("Manga from url " + u);
+        for (MangaSite mangaSite : values()) {
+            if (mangaSite.url.contains(u))
+                return mangaSite;
+        }
+        throw new UnsupportedOperationException(u + " not known");
     }
 }
