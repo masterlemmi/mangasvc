@@ -17,6 +17,7 @@ public enum MangaSite {
     }
 
     public static MangaSite from(String url) {
-        return Arrays.stream(values()).filter(s -> url.contains(s.url)).findFirst().orElseThrow(UnsupportedOperationException::new);
+        return Arrays.stream(values()).filter(s -> url.contains(s.url)).findFirst().orElseThrow(
+                () -> new UnsupportedOperationException(url + " not known"));
     }
 }
