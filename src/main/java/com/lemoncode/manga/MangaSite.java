@@ -5,11 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public enum MangaSite {
-    MANGANELO("manganelo.com"), MANHUADEX("manhuadex.com"), POMANGA("pomanga.com");
+    MANGANELO("manganelo.com", "manganato.com"), MANHUADEX("manhuadex.com"), POMANGA("pomanga.com");
 
-    private String url;
+    private final String[] url;
 
-    MangaSite(String url) {
+    MangaSite(String... url) {
         this.url = url;
     }
 
@@ -20,8 +20,9 @@ public enum MangaSite {
     public static MangaSite from(String u) {
         log.info("Manga from url " + u);
         for (MangaSite mangaSite : values()) {
-            if (u.contains(mangaSite.url))
-                return mangaSite;
+            for (String ul : mangaSite.url){
+                if (u.contains(ul)) return mangaSite;
+            }
         }
         throw new UnsupportedOperationException(u + " not known");
     }
