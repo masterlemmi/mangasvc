@@ -15,7 +15,7 @@ class MangaSiteCrawlerTest {
 
         assertTrue(crawler instanceof ManganeloCrawler);
         CrawledData data = crawler.findAll();
-        assertEquals(data.getMainUrl(), "https://manganelo.com/manga/tang_yin_zai_yi_jie");
+        assertEquals(data.getMainUrl(), "https://readmanganato.com/manga-af977640");
         assertEquals(data.getMangaTitle(), "Tang Yin Zai Yi Jie");
 
         CrawledData.Chapter next = data.getNextChapter();
@@ -25,12 +25,12 @@ class MangaSiteCrawlerTest {
         assertNotNull(current);
         assertNotNull(last);
 
-        assertEquals("Chapter 1", current.getTitle());
+        assertEquals("chapter_1", current.getTitle());
         assertEquals("Chapter 2", next.getTitle());
         assertNotNull(last.getTitle());
 
         assertEquals("https://manganelo.com/chapter/tang_yin_zai_yi_jie/chapter_1", current.getUrl());
-        assertEquals("https://manganelo.com/chapter/tang_yin_zai_yi_jie/chapter_2", next.getUrl());
+        assertEquals("https://readmanganato.com/manga-af977640/chapter-2", next.getUrl());
         assertNotNull(last.getUrl());
     }
 

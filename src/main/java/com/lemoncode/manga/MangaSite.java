@@ -20,7 +20,7 @@ public enum MangaSite {
     public static MangaSite from(String u) {
         log.info("Manga from url " + u);
         for (MangaSite mangaSite : values()) {
-            if (mangaSite.url.contains(u))
+            if (u.contains(mangaSite.url))
                 return mangaSite;
         }
         throw new UnsupportedOperationException(u + " not known");
