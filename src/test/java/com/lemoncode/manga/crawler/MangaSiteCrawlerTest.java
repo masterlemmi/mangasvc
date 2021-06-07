@@ -99,5 +99,41 @@ class MangaSiteCrawlerTest {
 
     }
 
+    @Test
+    public void findAllBestManhuas() {
+        SiteCrawler crawler = SiteCrawlerFactory.get("https://bestmanhuas.com/manga/the-origin/chapter-36");
+
+        assertTrue(crawler instanceof BestManhuasCrawler);
+        String title = crawler.findMangaTitle();
+
+        assertEquals("The Origin", title);
+
+        String chapterTitle = crawler.findChapterTitle();
+        assertEquals("Chapter 36", chapterTitle);
+
+        String mainUrl = UrlNormalizer.normalize(crawler.findMainUrl());
+
+        assertEquals("https://bestmanhuas.com/manga/the-origin", mainUrl);
+
+        CrawledData.Chapter next = crawler.findNextChapter();
+        CrawledData.Chapter current = crawler.findCurrentChapter();
+        CrawledData.Chapter last = crawler.findLastChapter();
+
+        assertNotNull(next);
+        assertNotNull(current);
+        assertNotNull(last);
+
+
+        assertEquals("Chapter 37", next.getTitle());
+        assertEquals("https://bestmanhuas.com/manga/the-origin/chapter-37", UrlNormalizer.normalize(next.getUrl()));
+
+        assertEquals("Chapter 36", current.getTitle());
+        assertEquals("https://bestmanhuas.com/manga/the-origin/chapter-36", UrlNormalizer.normalize(current.getUrl()));
+
+        assertNotNull(last.getTitle());
+        assertNotNull(last.getUrl());
+
+    }
+
 
 }

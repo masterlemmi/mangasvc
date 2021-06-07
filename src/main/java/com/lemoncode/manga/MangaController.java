@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -30,6 +32,20 @@ public class MangaController {
     @GetMapping("/new")
     public List<Manga> newReleases() {
         return this.mangaService.findNew();
+    }
+
+    @GetMapping("/sites")
+    public List<SupportedSite> supportedSites() {
+        MangaSite[] sites = MangaSite.values();
+        List<SupportedSite> res = new ArrayList<>();
+
+        for (MangaSite s : sites) {
+            SupportedSite supportedSite = new SupportedSite();
+            supportedSite.setSites(Arrays.asList(s.getUrl()));
+            supportedSite.setName(s.name());
+            res.add(supportedSite);
+        }
+        return res;
     }
 
     @PostMapping("/fetch/updates")
