@@ -47,12 +47,37 @@ public class ManhuadexCrawler extends LastChapterCrawler {
         return new CrawledData.Chapter(nextChapterTitle, nextChapterUrl);
     }
 
+//    @Override
+//    public CrawledData.Chapter findLastChapter() {
+//        if (this.mainUrl == null) {
+//            scanBreadCrumb();
+//        }
+//
+//
+//        Document doc = null;
+//        try {
+//            LOGGER.info("Crawling main url: " + mainUrl);
+//            doc = jsoupConnection(mainUrl).get();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            throw new IllegalStateException("Error crawling site. Can't retrieve dteails");
+//        }
+//
+//
+//        Element lastElement = doc.select("li.wp-manga-chapter").select("a[href]").first(); // a with href
+//
+//        System.out.println(lastElement);
+//        String title = lastElement.text();
+//        String url = lastElement.attr("href");
+//
+//        return new CrawledData.Chapter(title, url);
+//    }
+
     @Override
     public CrawledData.Chapter findLastChapter() {
         if (this.mainUrl == null) {
             scanBreadCrumb();
         }
-
 
         Document doc = null;
         try {
@@ -63,12 +88,28 @@ public class ManhuadexCrawler extends LastChapterCrawler {
             throw new IllegalStateException("Error crawling site. Can't retrieve dteails");
         }
 
+        String mangaId = doc.select("div#manga-chapters-holder").attr("data-id");
+        LOGGER.info("PoMangaId " + mangaId);
 
-        Element lastElement = doc.select("li.wp-manga-chapter").select("a[href]").first(); // a with href
+        String phpMangaList = "https://manhuadex.com/wp-admin/admin-ajax.php";
+        Document doc3;
+        try {
+            LOGGER.info("Crawling pomangalist: " + phpMangaList);
+            doc3 = jsoupConnection(phpMangaList).data("action", "manga_get_chapters" ).data("manga", mangaId ).post();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IllegalStateException("Error crawling site. Can't retrieve dteails");
+        }
 
-        System.out.println(lastElement);
+
+        Elements chapters = doc3.select(	"ul.main.version-chap");
+        Element lastElement = chapters.select("li").first().selectFirst("a[href]");
+
+
         String title = lastElement.text();
         String url = lastElement.attr("href");
+        System.out.println("Last Title: " + title);
+        System.out.println("Last URL: " + url);
 
         return new CrawledData.Chapter(title, url);
     }
