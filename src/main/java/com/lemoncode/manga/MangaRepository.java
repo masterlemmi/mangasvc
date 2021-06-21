@@ -6,10 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaDelete;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -114,9 +111,12 @@ public class MangaRepository {
         // set the root class
         Root<Manga> root = query.from(Manga.class);
 
-        query.where(cb.equal(root.get(Manga_.hasUpdate), false))
-                .where(cb.equal(root.get(Manga_.doneRead), true))
-                .where(cb.equal(root.get(Manga_.ended), false));
+
+        Predicate noUpdate = cb.equal(root.get(Manga_.hasUpdate), false);
+        Predicate doneRead = cb.equal(root.get(Manga_.doneRead), true);
+        Predicate notEnded = cb.equal(root.get(Manga_.ended), false);
+
+        query.where(cb.and(noUpdate, doneRead, notEnded));
         //perform query
         return this.entityManager.createQuery(query).getResultList();
     }
@@ -137,5 +137,35 @@ public class MangaRepository {
             return null;
         }
 
+    }
+
+    public List<Manga> findOngoing() {
+        this.entityManager.clear();
+        CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+        // create query
+        CriteriaQuery<Manga> query = cb.createQuery(Manga.class);
+        // set the root class
+        Root<Manga> root = query.from(Manga.class);
+
+        Predicate doneRead = cb.equal(root.get(Manga_.doneRead), false);
+
+        query.where(doneRead);
+        //perform query
+        return this.entityManager.createQuery(query).getResultList();
+    }
+
+    public List<Manga> findEnded() {
+        this.entityManager.clear();
+        CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
+        // create query
+        CriteriaQuery<Manga> query = cb.createQuery(Manga.class);
+        // set the root class
+        Root<Manga> root = query.from(Manga.class);
+
+        Predicate doneRead = cb.equal(root.get(Manga_.doneRead), true);
+
+        query.where(doneRead);
+        //perform query
+        return this.entityManager.createQuery(query).getResultList();
     }
 }

@@ -29,6 +29,17 @@ public class MangaController {
         return this.mangaService.findAll();
     }
 
+    @GetMapping("/ongoing")
+    public List<Manga> findAllOngoing() {
+        return this.mangaService.findAllOngoing();
+    }
+
+    @GetMapping("/ended")
+    public List<Manga> findAllEnded() {
+        return this.mangaService.findAllEnded();
+    }
+
+
     @GetMapping("/new")
     public List<Manga> newReleases() {
         return this.mangaService.findNew();
@@ -76,7 +87,7 @@ public class MangaController {
         return this.mangaService.markRead(body);
     }
 
-    @PutMapping("/end/{id}")
+    @PutMapping("/mark-ended/{id}")
     public Manga markEnd(@PathVariable("id") final Long id) {
         return this.mangaService.markEnded(id);
     }

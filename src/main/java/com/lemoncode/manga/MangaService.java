@@ -172,4 +172,12 @@ public class MangaService {
         return repository.save(manga);
     }
 
+    public List<Manga> findAllOngoing() {
+        return repository.findOngoing();
+
+    }
+
+    public List<Manga> findAllEnded() {
+        return repository.findEnded();
+    }
 }
