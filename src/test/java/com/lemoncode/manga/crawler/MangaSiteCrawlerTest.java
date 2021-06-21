@@ -11,7 +11,7 @@ class MangaSiteCrawlerTest {
     @Test
 
     public void findAllManganelo() {
-        SiteCrawler crawler = SiteCrawlerFactory.get("https://manganelo.com/chapter/tang_yin_zai_yi_jie/chapter_1");
+        SiteCrawler crawler = SiteCrawlerFactory.get("https://readmanganato.com/manga-af977640/chapter-1");
 
         assertTrue(crawler instanceof ManganeloCrawler);
         CrawledData data = crawler.findAll();
@@ -25,11 +25,11 @@ class MangaSiteCrawlerTest {
         assertNotNull(current);
         assertNotNull(last);
 
-        assertEquals("chapter_1", current.getTitle());
+        assertEquals("Chapter 1", current.getTitle());
         assertEquals("Chapter 2", next.getTitle());
         assertNotNull(last.getTitle());
 
-        assertEquals("https://manganelo.com/chapter/tang_yin_zai_yi_jie/chapter_1", current.getUrl());
+        assertEquals("https://readmanganato.com/manga-af977640/chapter-1", current.getUrl());
         assertEquals("https://readmanganato.com/manga-af977640/chapter-2", next.getUrl());
         assertNotNull(last.getUrl());
     }
