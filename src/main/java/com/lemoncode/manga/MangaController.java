@@ -23,6 +23,9 @@ public class MangaController {
     @Autowired
     private MangaService mangaService;
 
+    @Autowired
+    private MangaUpdaterAsyncService mangaUpdater;
+
 
     @GetMapping
     public List<Manga> findAll() {
@@ -62,6 +65,17 @@ public class MangaController {
     @PostMapping("/fetch/updates")
     public String checkForNewUpdates() {
         return this.mangaService.fetchUpdates();
+    }
+
+    @PostMapping("/fetch/updates-async")
+    public String checkForNewUpdatesAsync() {
+        this.mangaUpdater.fetchUpdates();
+        return "Job Submitted";
+    }
+
+    @GetMapping("/fetch/updates-status")
+    public MangaUpdateResult checkStatus() {
+        return this.mangaUpdater.getUpdates();
     }
 
     @PutMapping("/chapter")

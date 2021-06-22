@@ -112,15 +112,14 @@ public class MangaService {
                     manga.setHasUpdate(true);
                 }
                 repository.save(manga);
+
             } catch (Exception e) {
                 LOGGER.info("error checking updates for " + manga.getTitle() + ": " + e.getMessage());
+                e.printStackTrace();
             }
         }
-
-
         LOGGER.info("There are " + newUpdates + " new updates.");
-
-        return "200";
+        return "There are " + newUpdates + " new updates.";
     }
 
 
