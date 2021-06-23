@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.logging.Logger;
 
 @RestController
@@ -68,12 +67,15 @@ public class MangaController {
     }
 
     @PostMapping("/fetch/updates-async")
-    public String checkForNewUpdatesAsync() {
+    public MangaUpdateResult checkForNewUpdatesAsync() {
         this.mangaUpdater.fetchUpdates();
-        return "Job Submitted";
+        MangaUpdateResult res = new MangaUpdateResult();
+        res.setMessage("Job Submitted");
+        res.setStart(LocalDateTime.now());
+        return res;
     }
 
-    @GetMapping("/fetch/updates-status")
+    @GetMapping("/updates-status")
     public MangaUpdateResult checkStatus() {
         return this.mangaUpdater.getUpdates();
     }

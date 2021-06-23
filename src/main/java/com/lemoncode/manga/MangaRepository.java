@@ -147,9 +147,9 @@ public class MangaRepository {
         // set the root class
         Root<Manga> root = query.from(Manga.class);
 
-        Predicate doneRead = cb.equal(root.get(Manga_.doneRead), false);
+        Predicate doneRead = cb.equal(root.get(Manga_.ended), false);
 
-        query.where(doneRead);
+        query.where(doneRead).orderBy(cb.desc(root.get(Manga_.ended)), cb.desc(root.get(Manga_.hasUpdate)), cb.asc(root.get(Manga_.title)));
         //perform query
         return this.entityManager.createQuery(query).getResultList();
     }
@@ -162,9 +162,9 @@ public class MangaRepository {
         // set the root class
         Root<Manga> root = query.from(Manga.class);
 
-        Predicate doneRead = cb.equal(root.get(Manga_.doneRead), true);
+        Predicate doneRead = cb.equal(root.get(Manga_.ended), true);
 
-        query.where(doneRead);
+        query.where(doneRead).orderBy(cb.asc(root.get(Manga_.title)));
         //perform query
         return this.entityManager.createQuery(query).getResultList();
     }
