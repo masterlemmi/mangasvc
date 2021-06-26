@@ -23,7 +23,7 @@ public class MangaUpdaterJob {
     @Autowired
     MangaUpdaterAsyncService asyncService;
 
-    @Scheduled(cron = "0 0 0 * * *")   //every hour
+    @Scheduled(cron = "0 0 * * * *")   //every hour
     // @Scheduled(cron = "0 * * * * ?")  //ever minute
     public void scheduleMangaFetchUpdates() {
         LocalDateTime start = LocalDateTime.now();
