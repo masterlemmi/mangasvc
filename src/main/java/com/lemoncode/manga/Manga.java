@@ -34,6 +34,7 @@ public class Manga implements Serializable {
     @Column(name = "LAST_UPDATE_DATE")
     @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime lastUpdateDate;
+    private Integer rating;
 
     public void updateLastChapter(String nextChapterUrl) {
 
