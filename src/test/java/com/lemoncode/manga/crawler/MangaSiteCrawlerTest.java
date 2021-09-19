@@ -99,7 +99,7 @@ class MangaSiteCrawlerTest {
 
     }
 
-    @Test
+   // @Test
     public void findAllBestManhuas() {
         SiteCrawler crawler = SiteCrawlerFactory.get("https://bestmanhuas.com/manga/the-origin/chapter-36");
 
