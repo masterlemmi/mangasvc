@@ -11,8 +11,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8083/auth/realms/baeldung
-          jwk-set-uri: http://localhost:8083/auth/realms/baeldung/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8080/auth/realms/SpringBootKeycloak
+          jwk-set-uri: http://localhost:8080/auth/realms/SpringBootKeycloak/protocol/openid-connect/certs
   datasource:
     url: jdbc:oracle:thin:@localhost:1521/orclpdb1
     username: lem_stage
