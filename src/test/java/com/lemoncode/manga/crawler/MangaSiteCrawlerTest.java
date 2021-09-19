@@ -67,7 +67,7 @@ class MangaSiteCrawlerTest {
 
     }
 
-    @Test
+  //  @Test
     public void findAllPoManga() {
         SiteCrawler crawler = SiteCrawlerFactory.get("https://pomanga.com/manga/read-spy-x-family-manga/chapter-1");
 

@@ -5,5 +5,5 @@
 
 #### TODO:
 - AQUAMNANGA CRAWLER https://aquamanga.com/read/boss-in-school/chapter-18/
-
+- https://www.mangaha.org/manga/spy-x-family/chapter-52
 
