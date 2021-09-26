@@ -8,7 +8,7 @@ import com.lemoncode.manga.request.CreateNewEntryRequest;
 import com.lemoncode.manga.request.UpdateChapterRequest;
 import com.lemoncode.manga.request.UpdateReadStatusRequest;
 import com.lemoncode.util.NotFoundException;
-import com.lemoncode.util.ObjectGenerator;
+import com.lemoncode.util.MangaInstanceGenerator;
 import com.lemoncode.util.PHTime;
 import com.lemoncode.util.UrlParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class MangaService {
     }
 
     public Manga save(@Valid CreateNewEntryRequest m) {
-        Manga manga = ObjectGenerator.generate(m.getChapter());
+        Manga manga = MangaInstanceGenerator.generate(m.getChapter());
 
         Manga existing = repository.findByTitle(manga.getTitle());
 
@@ -110,6 +110,7 @@ public class MangaService {
                     manga.setLastChapter(data.getTitle());
                     manga.setDoneRead(false);
                     manga.setHasUpdate(true);
+                    manga.setLastUpdateDate(PHTime.now());
                 }
                 repository.save(manga);
 

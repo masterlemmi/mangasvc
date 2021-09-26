@@ -67,7 +67,7 @@ class MangaSiteCrawlerTest {
 
     }
 
-  //  @Test
+  //  @Test //TODO: remove or replace
     public void findAllPoManga() {
         SiteCrawler crawler = SiteCrawlerFactory.get("https://pomanga.com/manga/read-spy-x-family-manga/chapter-1");
 
@@ -134,6 +134,40 @@ class MangaSiteCrawlerTest {
         assertNotNull(last.getUrl());
 
     }
+
+    @Test
+    public void findAquaManga() {
+        SiteCrawler crawler = SiteCrawlerFactory.get("https://aquamanga.com/read/boss-in-school/chapter-74/");
+
+        assertTrue(crawler instanceof AquaMangaCrawler);
+        String title = crawler.findMangaTitle();
+
+        assertEquals("Boss in School", title);
+
+        String chapterTitle = crawler.findChapterTitle();
+        assertEquals("Chapter 74", chapterTitle);
+
+        String mainUrl = UrlNormalizer.normalize(crawler.findMainUrl());
+
+        assertEquals("https://aquamanga.com/read/boss-in-school", mainUrl);
+
+        CrawledData.Chapter next = crawler.findNextChapter();
+        assertNotNull(next);
+        assertEquals("Chapter 75", next.getTitle());
+        assertEquals("https://aquamanga.com/read/boss-in-school/chapter-75", UrlNormalizer.normalize(next.getUrl()));
+
+        CrawledData.Chapter current = crawler.findCurrentChapter();
+        assertNotNull(current);
+        assertEquals("Chapter 74", current.getTitle());
+        assertEquals("https://aquamanga.com/read/boss-in-school/chapter-74", UrlNormalizer.normalize(current.getUrl()));
+
+        CrawledData.Chapter last = crawler.findLastChapter();
+        assertNotNull(last);
+        assertNotNull(last.getTitle());
+        assertNotNull(last.getUrl());
+
+    }
+
 
 
 }

@@ -3,7 +3,7 @@ package com.lemoncode.spring;
 
 import com.lemoncode.manga.MangaRepository;
 import com.lemoncode.util.UrlParser;
-import com.lemoncode.util.ObjectGenerator;
+import com.lemoncode.util.MangaInstanceGenerator;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.slf4j.Logger;
@@ -48,7 +48,7 @@ public class AppInitializer implements ApplicationRunner {
             Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(reader);
             for (CSVRecord record : records) {
                 String chapterUrl = record.get(2);
-                repo.save(ObjectGenerator.generate(chapterUrl));
+                repo.save(MangaInstanceGenerator.generate(chapterUrl));
             }
 
             System.out.println("Done Loading Manga List");

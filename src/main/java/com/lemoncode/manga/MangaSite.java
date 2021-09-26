@@ -6,7 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public enum MangaSite {
     MANGANELO("manganelo.com", "manganato.com"), MANHUADEX("manhuadex.com"), POMANGA("pomanga.com"),
-    BEST_MANHUAS("bestmanhuas.com");
+    BEST_MANHUAS("bestmanhuas.com"),
+    AQUA_MANGA("aquamanga.com")
+    ;
 
     private final String[] url;
 
