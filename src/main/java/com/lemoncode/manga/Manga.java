@@ -31,6 +31,10 @@ public class Manga implements Serializable {
     private boolean doneRead;
     @Column(name = "ENDED")
     private boolean ended;
+    @Column(name = "UPDATE_CODE")
+    private Integer updateCode; //httpcode
+    @Column(name = "UPDATE_ERROR")
+    private String updateError;
     @Column(name = "LAST_UPDATE_DATE")
     @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime lastUpdateDate;

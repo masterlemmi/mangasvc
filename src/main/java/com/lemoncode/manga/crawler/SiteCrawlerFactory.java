@@ -20,6 +20,10 @@ public class SiteCrawlerFactory {
                 return new BestManhuasCrawler(chapterUrl);
             case AQUA_MANGA:
                 return new AquaMangaCrawler(chapterUrl);
+            case MANGAHA:
+                return new MangahaCrawler(chapterUrl);
+            case ONE_PUNCH:
+                return new OnePunchCrawler(chapterUrl);
             default:
                 throw new NotImplementedException(mangaSite + " is not acceptable");
 

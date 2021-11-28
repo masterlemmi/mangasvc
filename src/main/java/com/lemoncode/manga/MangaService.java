@@ -111,12 +111,24 @@ public class MangaService {
                     manga.setDoneRead(false);
                     manga.setHasUpdate(true);
                     manga.setLastUpdateDate(PHTime.now());
+                    manga.setUpdateCode(200);
+                    manga.setUpdateError(null);
+                    repository.save(manga);
                 }
-                repository.save(manga);
 
-            } catch (Exception e) {
+
+            } catch (MangaUpdateException e){
                 LOGGER.info("error checking updates for " + manga.getTitle() + ": " + e.getMessage());
                 e.printStackTrace();
+                manga.setUpdateCode(e.getHttpStatus());
+                manga.setUpdateError(e.getMessage());
+                repository.save(manga);
+            }
+            catch (Exception e) {
+                LOGGER.info("error checking updates for " + manga.getTitle() + ": " + e.getMessage());
+                e.printStackTrace();
+                manga.setUpdateError(e.getMessage());
+                repository.save(manga);
             }
         }
         LOGGER.info("There are " + newUpdates + " new updates.");

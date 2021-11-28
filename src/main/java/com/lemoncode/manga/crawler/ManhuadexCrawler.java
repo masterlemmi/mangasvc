@@ -88,23 +88,24 @@ public class ManhuadexCrawler extends LastChapterCrawler {
             throw new IllegalStateException("Error crawling site. Can't retrieve dteails");
         }
 
-        String mangaId = doc.select("div#manga-chapters-holder").attr("data-id");
-        LOGGER.info("PoMangaId " + mangaId);
+//        String mangaId = doc.select("div#manga-chapters-holder").attr("data-id");
+//        LOGGER.info("PoMangaId " + mangaId);
 
-        String phpMangaList = "https://manhuadex.com/wp-admin/admin-ajax.php";
-        Document doc3;
-        try {
-            LOGGER.info("Crawling pomangalist: " + phpMangaList);
-            doc3 = jsoupConnection(phpMangaList).data("action", "manga_get_chapters" ).data("manga", mangaId ).post();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new IllegalStateException("Error crawling site. Can't retrieve dteails");
-        }
+//        String phpMangaList = "https://manhuadex.com/wp-admin/admin-ajax.php";
+//        Document doc3;
+//        try {
+//            LOGGER.info("Crawling pomangalist: " + phpMangaList);
+//            doc3 = jsoupConnection(phpMangaList).data("action", "manga_get_chapters" ).data("manga", mangaId ).post();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            throw new IllegalStateException("Error crawling site. Can't retrieve dteails");
+//        }
 
 
-        Elements chapters = doc3.select(	"ul.main.version-chap");
-        Element lastElement = chapters.select("li").first().selectFirst("a[href]");
+//        Elements chapters = doc3.select(	"ul.main.version-chap");
+//        Element lastElement = chapters.select("li").first().selectFirst("a[href]");
 
+        Element lastElement = doc.select("li.wp-manga-chapter > a").get(0);
 
         String title = lastElement.text();
         String url = lastElement.attr("href");

@@ -45,7 +45,7 @@ class MangaSiteCrawlerTest {
         String chapterTitle = crawler.findChapterTitle();
         assertEquals("Yuan Zun", title);
         assertEquals("Chapter 1", chapterTitle);
-        assertEquals("https://manhuadex.com/manhua/yuan-zun", mainUrl);
+        assertEquals("https://manhuadex.com/am/manhua/yuan-zun", mainUrl);
 
         CrawledData.Chapter next = crawler.findNextChapter();
         CrawledData.Chapter current = crawler.findCurrentChapter();
@@ -57,7 +57,7 @@ class MangaSiteCrawlerTest {
 
 
         assertEquals("Chapter 1.5", next.getTitle());
-        assertEquals("https://manhuadex.com/manhua/yuan-zun/chapter-1-5", UrlNormalizer.normalize(next.getUrl()));
+        assertEquals("https://manhuadex.com/am/manhua/yuan-zun/chapter-1-5", UrlNormalizer.normalize(next.getUrl()));
 
         assertEquals("Chapter 1", current.getTitle());
         assertEquals("https://manhuadex.com/manhua/yuan-zun/chapter-1", UrlNormalizer.normalize(current.getUrl()));
@@ -135,9 +135,9 @@ class MangaSiteCrawlerTest {
 
     }
 
-    @Test
+   // @Test
     public void findAquaManga() {
-        SiteCrawler crawler = SiteCrawlerFactory.get("https://aquamanga.com/read/boss-in-school/chapter-74/");
+        SiteCrawler crawler = SiteCrawlerFactory.get("https://aquamanga.com/read/boss-in-school/chapter-74");
 
         assertTrue(crawler instanceof AquaMangaCrawler);
         String title = crawler.findMangaTitle();
@@ -160,6 +160,72 @@ class MangaSiteCrawlerTest {
         assertNotNull(current);
         assertEquals("Chapter 74", current.getTitle());
         assertEquals("https://aquamanga.com/read/boss-in-school/chapter-74", UrlNormalizer.normalize(current.getUrl()));
+
+        CrawledData.Chapter last = crawler.findLastChapter();
+        assertNotNull(last);
+        assertNotNull(last.getTitle());
+        assertNotNull(last.getUrl());
+
+    }
+
+
+    @Test
+    public void findAMangaha() {
+        SiteCrawler crawler = SiteCrawlerFactory.get("https://www.mangaha.org/manga/spy-x-family/chapter-55");
+
+        assertTrue(crawler instanceof MangahaCrawler);
+        String title = crawler.findMangaTitle();
+
+        assertEquals("Spy X Family", title);
+
+        String chapterTitle = crawler.findChapterTitle();
+        assertEquals("Chapter 55", chapterTitle);
+
+        String mainUrl = UrlNormalizer.normalize(crawler.findMainUrl());
+
+        assertEquals("https://www.mangaha.org/manga/spy-x-family", mainUrl);
+
+        CrawledData.Chapter next = crawler.findNextChapter();
+        assertNotNull(next);
+        assertEquals("Chapter 56", next.getTitle());
+        assertEquals("https://www.mangaha.org/manga/spy-x-family/chapter-56", UrlNormalizer.normalize(next.getUrl()));
+
+        CrawledData.Chapter current = crawler.findCurrentChapter();
+        assertNotNull(current);
+        assertEquals("Chapter 55", current.getTitle());
+        assertEquals("https://www.mangaha.org/manga/spy-x-family/chapter-55", UrlNormalizer.normalize(current.getUrl()));
+
+        CrawledData.Chapter last = crawler.findLastChapter();
+        assertNotNull(last);
+        assertNotNull(last.getTitle());
+        assertNotNull(last.getUrl());
+
+    }
+    @Test
+    public void findOnePunch() {
+        SiteCrawler crawler = SiteCrawlerFactory.get("https://onepunch-manga.com/manga/one-punch-man-ch-142/");
+
+        assertTrue(crawler instanceof OnePunchCrawler);
+        String title = crawler.findMangaTitle();
+
+        assertEquals("One Punch Man", title);
+
+        String chapterTitle = crawler.findChapterTitle();
+        assertEquals("Chapter 142", chapterTitle);
+
+        String mainUrl = UrlNormalizer.normalize(crawler.findMainUrl());
+
+        assertEquals("https://onepunch-manga.com", mainUrl);
+
+        CrawledData.Chapter next = crawler.findNextChapter();
+        assertNotNull(next);
+        assertEquals("Chapter 143", next.getTitle());
+        assertEquals("https://onepunch-manga.com/manga/one-punch-man-chapters-readmanga-143", UrlNormalizer.normalize(next.getUrl()));
+
+        CrawledData.Chapter current = crawler.findCurrentChapter();
+        assertNotNull(current);
+        assertEquals("Chapter 142", current.getTitle());
+        assertEquals("https://onepunch-manga.com/manga/one-punch-man-ch-142", UrlNormalizer.normalize(current.getUrl()));
 
         CrawledData.Chapter last = crawler.findLastChapter();
         assertNotNull(last);

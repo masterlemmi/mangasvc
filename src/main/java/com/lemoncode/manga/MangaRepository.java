@@ -149,7 +149,7 @@ public class MangaRepository {
 
         Predicate doneRead = cb.equal(root.get(Manga_.ended), false);
 
-        query.where(doneRead).orderBy(cb.desc(root.get(Manga_.ended)), cb.desc(root.get(Manga_.hasUpdate)), cb.asc(root.get(Manga_.title)));
+        query.where(doneRead).orderBy(cb.desc(root.get(Manga_.hasUpdate)), cb.desc(root.get(Manga_.lastUpdateDate)));
         //perform query
         return this.entityManager.createQuery(query).getResultList();
     }

@@ -4,8 +4,8 @@
 3. mvn spring-boot:run
 
 #### TODO:
-- AQUAMNANGA CRAWLER https://aquamanga.com/read/boss-in-school/chapter-18/
-- https://www.mangaha.org/manga/spy-x-family/chapter-52
+- AQUAMNANGA CRAWLER https://aquamanga.com/read/boss-in-school/chapter-18/ failure?
+
 
 #### How to add new manga resource to crawl
 1. update enum MangaSite.java
