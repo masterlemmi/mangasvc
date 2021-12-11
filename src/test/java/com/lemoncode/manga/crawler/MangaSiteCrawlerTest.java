@@ -220,7 +220,7 @@ class MangaSiteCrawlerTest {
         CrawledData.Chapter next = crawler.findNextChapter();
         assertNotNull(next);
         assertEquals("Chapter 143", next.getTitle());
-        assertEquals("https://onepunch-manga.com/manga/one-punch-man-chapters-readmanga-143", UrlNormalizer.normalize(next.getUrl()));
+        assertEquals("https://onepunch-manga.com/manga/one-punch-man-chapters-readmangaa-143", UrlNormalizer.normalize(next.getUrl()));
 
         CrawledData.Chapter current = crawler.findCurrentChapter();
         assertNotNull(current);
