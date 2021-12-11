@@ -4,6 +4,7 @@ import com.lemoncode.manga.request.CreateNewEntryRequest;
 import com.lemoncode.manga.request.UpdateChapterRequest;
 import com.lemoncode.manga.request.UpdateReadStatusRequest;
 import com.lemoncode.validator.ChapterValueValidator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,8 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping(value = "/manga")
+@Slf4j
 public class MangaController {
-    private final static Logger LOGGER = Logger.getLogger(MangaController.class.getName());
 
     @Autowired
     private MangaService mangaService;

@@ -7,28 +7,34 @@ import com.lemoncode.manga.crawler.SiteCrawlerFactory;
 import com.lemoncode.manga.request.CreateNewEntryRequest;
 import com.lemoncode.manga.request.UpdateChapterRequest;
 import com.lemoncode.manga.request.UpdateReadStatusRequest;
-import com.lemoncode.util.NotFoundException;
+import com.lemoncode.notification.DirectNotification;
+import com.lemoncode.notification.FCMService;
+import com.lemoncode.notification.fcmtoken.FCMToken;
+import com.lemoncode.notification.fcmtoken.FCMTokenService;
 import com.lemoncode.util.MangaInstanceGenerator;
+import com.lemoncode.util.NotFoundException;
 import com.lemoncode.util.PHTime;
 import com.lemoncode.util.UrlParser;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Logger;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class MangaService {
-    private final static Logger LOGGER = Logger.getLogger(MangaService.class.getName());
-    @Autowired
-    MangaRepository repository;
-
-    @Autowired
-    private UrlParser parser;
-
+    private final MangaRepository repository;
+    private final UrlParser parser;
+    private final FCMService fcmService;
+    private final FCMTokenService fcmTokenService;
 
     public List<Manga> findAll() {
         List<Manga> allManga = repository.findAll();
@@ -95,8 +101,8 @@ public class MangaService {
 
     public String fetchUpdates() {
         List<Manga> noUpdates = repository.findNoUpdatesAndDoneReadAndNotEnded();
-        LOGGER.info("Updating " + noUpdates.size() + " etnries");
-        int newUpdates = 0;
+        log.info("Updating " + noUpdates.size() + " etnries");
+        List<Manga> newUpdatedManga = new ArrayList<>();
 
         for (Manga manga : noUpdates) {
 
@@ -104,8 +110,7 @@ public class MangaService {
                 SiteCrawler siteCrawler = SiteCrawlerFactory.get(manga.getLastChapterUrl());
                 CrawledData.Chapter data = siteCrawler.findNextChapter();
                 if (data != null) {
-                    LOGGER.info(manga.getTitle() + " has next chapter: " + data.getUrl());
-                    newUpdates++;
+                    log.info(manga.getTitle() + " has next chapter: " + data.getUrl());
                     manga.setLastChapterUrl(data.getUrl());
                     manga.setLastChapter(data.getTitle());
                     manga.setDoneRead(false);
@@ -113,26 +118,57 @@ public class MangaService {
                     manga.setLastUpdateDate(PHTime.now());
                     manga.setUpdateCode(200);
                     manga.setUpdateError(null);
+                    newUpdatedManga.add(manga);
                     repository.save(manga);
                 }
 
 
-            } catch (MangaUpdateException e){
-                LOGGER.info("error checking updates for " + manga.getTitle() + ": " + e.getMessage());
+            } catch (MangaUpdateException e) {
+                log.info("error checking updates for " + manga.getTitle() + ": " + e.getMessage());
                 e.printStackTrace();
                 manga.setUpdateCode(e.getHttpStatus());
                 manga.setUpdateError(e.getMessage());
                 repository.save(manga);
-            }
-            catch (Exception e) {
-                LOGGER.info("error checking updates for " + manga.getTitle() + ": " + e.getMessage());
+            } catch (Exception e) {
+                log.info("error checking updates for " + manga.getTitle() + ": " + e.getMessage());
                 e.printStackTrace();
                 manga.setUpdateError(e.getMessage());
                 repository.save(manga);
             }
         }
-        LOGGER.info("There are " + newUpdates + " new updates.");
-        return "There are " + newUpdates + " new updates.";
+        log.info("There are " + newUpdatedManga.size() + " new updates.");
+        sendNotifications(newUpdatedManga);
+        return "There are " + newUpdatedManga.size() + " new updates.";
+    }
+
+    private void sendNotifications(List<Manga> newUpdatedManga) {
+        if (CollectionUtils.isEmpty(newUpdatedManga)) return;
+
+        List<FCMToken> tokens = fcmTokenService.findAll();
+
+        if (CollectionUtils.isEmpty(tokens)) return;
+
+        Map<Boolean, List<FCMToken>> tokensPartition = tokens.stream().collect(
+                Collectors.partitioningBy(FCMToken::getSimpleMessageFlag));
+        for (FCMToken token : tokensPartition.get(true)) {
+            DirectNotification notification = new DirectNotification();
+            String msg = "There are " + newUpdatedManga.size() + " updates to tracked documents.";
+            notification.setTitle("Document Tracking");
+            notification.setMessage(msg);
+            notification.setTarget(token.getToken());
+            fcmService.sendNotificationToTarget(notification);
+        }
+
+        for (FCMToken token : tokensPartition.get(false)) {
+            for (Manga manga : newUpdatedManga) {
+                DirectNotification notification = new DirectNotification();
+                notification.setTitle(manga.getTitle());
+                String msg = "New: " + manga.getLastChapter();
+                notification.setMessage(msg);
+                notification.setTarget(token.getToken());
+                fcmService.sendNotificationToTarget(notification);
+            }
+        }
     }
 
 
@@ -144,19 +180,19 @@ public class MangaService {
         }
 
         if (body.isDone()) {
-            LOGGER.info("Setting " + manga.getTitle() + ":" + manga.getLastChapter() + " to DONE");
+            log.info("Setting " + manga.getTitle() + ":" + manga.getLastChapter() + " to DONE");
 
             SiteCrawler siteCrawler = SiteCrawlerFactory.get(manga.getLastChapterUrl());
             CrawledData.Chapter data = siteCrawler.findNextChapter();
 
             if (data != null) {
-                LOGGER.info(manga.getTitle() + " has next chapter: " + data.getUrl());
+                log.info(manga.getTitle() + " has next chapter: " + data.getUrl());
                 manga.setLastChapterUrl(data.getUrl());
                 manga.setLastChapter(data.getTitle());
                 manga.setDoneRead(false);
                 manga.setHasUpdate(true);
             } else {
-                LOGGER.info(manga.getTitle() + " has no next chapter");
+                log.info(manga.getTitle() + " has no next chapter");
                 manga.setDoneRead(true);
                 manga.setHasUpdate(false);
             }
