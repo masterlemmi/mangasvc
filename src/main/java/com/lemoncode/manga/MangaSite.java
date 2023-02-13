@@ -11,7 +11,8 @@ public enum MangaSite {
     BEST_MANHUAS("bestmanhuas.com"),
     AQUA_MANGA("aquamanga.com"),
     MANGAHA("www.mangaha.org"),
-    ONE_PUNCH("onepunch-manga.com")
+    ONE_PUNCH("onepunchmansmanga.com"),
+    MANGAACE("mangace.com")
 
     ;
 

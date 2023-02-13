@@ -23,7 +23,9 @@ public class SiteCrawlerFactory {
             case MANGAHA:
                 return new MangahaCrawler(chapterUrl);
             case ONE_PUNCH:
-                return new OnePunchCrawler(chapterUrl);
+                return new OnePunchCrawlerNew(chapterUrl);
+            case MANGAACE:
+                return new MangaAceCrawler(chapterUrl);
             default:
                 throw new NotImplementedException(mangaSite + " is not acceptable");
 
